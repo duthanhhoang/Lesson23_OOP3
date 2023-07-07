@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tank Game</title>
+    <script src="classes/Bullet.js"></script>
+    <script src="classes/Tank.js"></script>
+</head>
+<body>
+    <canvas id="game" width="800" height="400" style="background-color: black;"></canvas>
+    <script>
+        let game = document.getElementById("game");
+        let bullets = [];
+
+        function bulletMove() {
+            for (let i = 0; i < bullets.length; i++) {
+                bullets[i].move();
+                bullets[i].render();
+            }
+        }
+
+        let tank = new Tank(game);
+        
+        function main() {
+            clearScreen();
+            tank.move();
+            bulletMove();
+            tank.renderImg();
+            requestAnimationFrame(main)
+        }
+
+        main();
+
+        window.addEventListener("keydown",function (evt) {
+            
+            // console.log(tank.direction);
+            // tank.direction = evt.key;
+            if(evt.key == "a"){
+                tank.direction = "left";
+                tank.state = "move";
+            }
+            if(evt.key == "d"){
+                tank.direction = "right";
+                tank.state = "move";
+            }
+            if(evt.key == "w"){
+                tank.direction = "up";
+                tank.state = "move";
+            }
+            if(evt.key == "s"){
+                tank.direction = "down";
+                tank.state = "move";
+            }
+        })
+
+        window.addEventListener("keyup",function (evt) {
+            tank.state = "idle";
+            if(evt.key == "Enter"){
+                let bullet = tank.fire();
+                bullets.push(bullet);
+                console.log(bullets);
+            }
+            // tank.direction = "";
+          
+        })
+
+        function clearScreen() {
+            let ctx = game.getContext("2d");
+            ctx.clearRect(0,0,game.width, game.height);
+        }
+    </script>
+</body>
+</html>
